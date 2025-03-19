@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS immobilier;
-USE immobilier;
+CREATE DATABASE IF NOT EXISTS mydatabase;
+USE mydatabase;
 
 CREATE TABLE IF NOT EXISTS Appartement (
     id INT AUTO_INCREMENT PRIMARY KEY,
