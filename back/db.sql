@@ -1,0 +1,9 @@
+CREATE DATABASE IF NOT EXISTS immobilier;
+USE immobilier;
+
+CREATE TABLE IF NOT EXISTS Appartement (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    numApp VARCHAR(50) NOT NULL UNIQUE,
+    design TEXT NOT NULL,
+    loyer DECIMAL(10,2) NOT NULL
+);
