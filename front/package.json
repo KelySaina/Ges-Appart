@@ -1,0 +1,34 @@
+{
+  "name": "front",
+  "license": "0BSD",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "web": "expo start --web"
+  },
+  "dependencies": {
+    "@react-navigation/native": "^7.0.18",
+    "@react-navigation/stack": "^7.2.2",
+    "axios": "^1.8.4",
+    "expo": "~52.0.40",
+    "expo-status-bar": "~2.0.1",
+    "react": "18.3.1",
+    "react-native": "0.76.7",
+    "react-native-dotenv": "^3.4.11",
+    "react-native-gesture-handler": "^2.24.0",
+    "react-native-safe-area-context": "^5.3.0",
+    "tailwind-rn": "^4.2.0",
+    "tailwindcss": "^4.0.15"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/plugin-transform-private-methods": "^7.25.9",
+    "@tailwindcss/postcss": "^4.0.15",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "postcss": "^8.5.3"
+  },
+  "private": true
+}
