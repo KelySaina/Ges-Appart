@@ -1,70 +1,97 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, Button, StyleSheet, Alert } from "react-native";
+import { View, StyleSheet, Alert } from "react-native";
+import { TextInput, Button } from "react-native-paper";
 import axios from "axios";
 import { API_URL } from "@env";
 
 export default function AddEditScreen({ route, navigation }) {
-  const [numApp, setNumApp] = useState("");
-  const [design, setDesign] = useState("");
-  const [loyer, setLoyer] = useState("");
+  const [form, setForm] = useState({
+    numApp: "",
+    design: "",
+    loyer: "",
+  });
   const [editId, setEditId] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (route.params?.item) {
-      setNumApp(route.params.item.numApp);
-      setDesign(route.params.item.design);
-      setLoyer(route.params.item.loyer.toString());
+      setForm({
+        numApp: route.params.item.numApp,
+        design: route.params.item.design,
+        loyer: route.params.item.loyer.toString(),
+      });
       setEditId(route.params.item.id);
     }
   }, [route.params]);
 
+  const handleChange = (field, value) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
   const saveAppartement = async () => {
-    if (!numApp || !design || !loyer) {
-      Alert.alert("Error", "All fields are required!");
+    if (!form.numApp || !form.design || !form.loyer) {
+      Alert.alert("Erreur", "Tous les champs sont requis !");
       return;
     }
 
-    const appartement = { numApp, design, loyer: parseFloat(loyer) };
+    setLoading(true);
 
     try {
       if (editId) {
-        await axios.put(`${API_URL}/${editId}`, appartement);
+        await axios.put(`${API_URL}/${editId}`, {
+          ...form,
+          loyer: parseFloat(form.loyer),
+        });
       } else {
-        await axios.post(API_URL, appartement);
+        await axios.post(API_URL, { ...form, loyer: parseFloat(form.loyer) });
       }
       navigation.goBack();
     } catch (error) {
-      Alert.alert("Error", "Failed to save data");
+      Alert.alert("Erreur", "Échec de l'enregistrement.");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <View style={styles.container}>
       <TextInput
+        label="Numéro d'Appartement"
+        value={form.numApp}
+        onChangeText={(value) => handleChange("numApp", value)}
+        mode="outlined"
         style={styles.input}
-        value={numApp}
-        onChangeText={setNumApp}
-        placeholder="Apartment Number"
       />
       <TextInput
+        label="Désignation"
+        value={form.design}
+        onChangeText={(value) => handleChange("design", value)}
+        mode="outlined"
         style={styles.input}
-        value={design}
-        onChangeText={setDesign}
-        placeholder="Design"
       />
       <TextInput
-        style={styles.input}
-        value={loyer}
-        onChangeText={setLoyer}
-        placeholder="Loyer (€)"
+        label="Loyer (€)"
+        value={form.loyer}
+        onChangeText={(value) => handleChange("loyer", value)}
         keyboardType="numeric"
+        mode="outlined"
+        style={styles.input}
       />
-      <Button title="Save" onPress={saveAppartement} />
+      <Button
+        mode="contained"
+        onPress={saveAppartement}
+        loading={loading}
+        disabled={loading}
+        style={styles.button}
+      >
+        {loading ? "Enregistrement..." : "Enregistrer"}
+      </Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  input: { borderBottomWidth: 1, marginBottom: 20, fontSize: 18, padding: 10 },
+  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
+  input: { marginBottom: 15 },
+  button: { marginTop: 10 },
 });
