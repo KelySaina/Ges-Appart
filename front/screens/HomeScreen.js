@@ -21,6 +21,10 @@ export default function HomeScreen({ navigation }) {
     }, [])
   );
 
+  const formatNumberWithSpaces = (num) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  };
+
   const fetchAppartements = async () => {
     try {
       const response = await axios.get(API_URL);
@@ -70,9 +74,10 @@ export default function HomeScreen({ navigation }) {
           )}
         />
         <Card.Content>
-          <Text
-            style={styles.statValue}
-          >{`${item.loyer.toLocaleString()}€`}</Text>
+          <Text style={styles.statValue}>
+            {`${formatNumberWithSpaces(item.loyer)} €`} -{" "}
+            {item.loyer < 1000 ? "Bas" : item.loyer > 5000 ? "Elevé" : "Moyen"}
+          </Text>
         </Card.Content>
       </TouchableOpacity>
     </Card>
@@ -96,15 +101,17 @@ export default function HomeScreen({ navigation }) {
       <View style={styles.statsContainer}>
         <View style={styles.statBox}>
           <Text style={styles.statLabel}>Total</Text>
-          <Text style={styles.statValue}>{total.toLocaleString()}€</Text>
+          <Text style={styles.statValue}>
+            {formatNumberWithSpaces(total)} €
+          </Text>
         </View>
         <View style={styles.statBox}>
           <Text style={styles.statLabel}>Min</Text>
-          <Text style={styles.statValue}>{min.toLocaleString()}€</Text>
+          <Text style={styles.statValue}>{formatNumberWithSpaces(min)} €</Text>
         </View>
         <View style={styles.statBox}>
           <Text style={styles.statLabel}>Max</Text>
-          <Text style={styles.statValue}>{max.toLocaleString()}€</Text>
+          <Text style={styles.statValue}>{formatNumberWithSpaces(max)} €</Text>
         </View>
       </View>
       <FlatList
